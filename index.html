@@ -90,6 +90,23 @@ button.ghost{background:transparent;border:1px solid rgba(15,23,42,0.06);color:v
 }
 @media (max-width:480px){.container{margin:10px auto;padding:10px;}.card{padding:15px;}.header-row{flex-direction:column;gap:8px;}.meta{flex-direction:column;align-items:flex-start;gap:4px;}.meta input{width:100%;max-width:none;}.q{padding:10px;margin:10px 0;}.opts{flex-direction:column;gap:8px;}.opt{flex:1 1 auto;padding:12px;min-height:60px;}.actions{gap:8px;}.btn{padding:12px 18px;}.type-box{padding:15px;}.trait-pair{flex-direction:column;gap:8px;}.trait-box{width:100%;}.careers-table th,.careers-table td{padding:6px;font-size:0.9rem;}.print-header{flex-direction:column;gap:4px;align-items:flex-start;}}
 body{-webkit-tap-highlight-color:transparent;}
+
+/* --- iPhone optimizations --- */
+:root { --safe-bottom: env(safe-area-inset-bottom); }
+html { -webkit-text-size-adjust: 100%; }
+#progress{ position: sticky; top: 0; background: var(--page-bg); padding: 10px 12px; z-index: 5; border-bottom: 1px solid var(--border); }
+.opt{ min-height: 56px; padding: 12px 14px; }
+.opt input{ width: 22px; height: 22px; }
+button.btn, button.ghost{ min-height: 48px; }
+.actions.sticky-actions{ position: sticky; bottom: calc(0px + var(--safe-bottom)); background: linear-gradient(to top, rgba(246,247,251,0.98), rgba(246,247,251,0.85)); padding-bottom: calc(8px + var(--safe-bottom)); margin-bottom: 0; }
+:focus-visible{ outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 6px; }
+@media (max-width: 480px){
+  .container{ padding-bottom: calc(24px + var(--safe-bottom)); }
+}
+@media (prefers-reduced-motion: reduce){
+  *{ scroll-behavior: auto !important; transition: none !important; }
+}
+
 </style>
 </head>
 <body>
@@ -103,12 +120,12 @@ body{-webkit-tap-highlight-color:transparent;}
   <div class="meta">Student: <input id="studentName" placeholder="(Student name)" /> Date: <input id="reportDate" /></div>
 </div>
 
-<div id="progress">Question 1 of 40</div>
+<div id="progress" aria-live="polite">Questions 0–40</div>
 
 <section id="questions-section">
   <form id="quizForm">
     <div id="questions"></div>
-    <div class="actions">
+    <div class="actions sticky-actions">
       <button type="button" id="seeResults" class="btn">See Results</button>
     </div>
   </form>
@@ -211,7 +228,7 @@ body{-webkit-tap-highlight-color:transparent;}
 </div>
 </div>
 
-<script>
+<script defer>
 document.addEventListener('DOMContentLoaded', () => {
   console.log("DOM fully loaded, starting initialization...");
 
@@ -270,7 +287,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Set counts based on total questions
   document.getElementById('subtitleCount').textContent = questions.length.toString();
-  document.getElementById('progress').textContent = `Question 1 of ${questions.length}`;
+  document.getElementById('progress').textContent = `Questions 0–${questions.length}`;
 
   // Render questions
   let qHtml = "";
@@ -289,7 +306,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const done = document.querySelectorAll('input[type=radio]:checked').length;
     const total = questions.length;
     const nextNum = Math.min(done + 1, total);
-    document.getElementById("progress").textContent = `Question ${nextNum} of ${total}`;
+    document.getElementById("progress").textContent = `Questions ${done}–${total}`;
     document.querySelectorAll('.opt').forEach(opt => opt.classList.remove('selected'));
     document.querySelectorAll('input[type=radio]:checked').forEach(checked => {
       const label = checked.closest('.opt');
@@ -299,7 +316,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
   document.querySelectorAll("input[type=radio]").forEach(inp => {
     inp.addEventListener("change", refreshSelectionsAndProgress);
-  });
+  // Initialize progress on load
+  refreshSelectionsAndProgress();
+});
 
   // See Results
   document.getElementById('seeResults').addEventListener('click', () => {
@@ -426,5 +445,4 @@ document.getElementById('reportDate').value = new Date().toLocaleDateString();
 </script>
 </body>
 </html>
-
 
