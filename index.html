@@ -3,58 +3,63 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
-<title>Career Assesment Profile</title>
+<title>Career Assessment Profile</title>
 
 <style>
 :root{--page-bg:#f6f7fb;--card:#ffffff;--muted:#6b7280;--accent:#335d9f;--accent2:#2f9d6e;--border:#e6eef8;--paper-margin:20mm;}
 html,body{height:100%;margin:0;background:var(--page-bg);font-family:Inter,system-ui,-apple-system,'Segoe UI',Roboto,'Helvetica Neue',Arial;}
 .container{max-width:940px;margin:20px auto;padding:18px;}
 .card{background:var(--card);border-radius:12px;padding:22px;box-shadow:0 8px 30px rgba(20,30,60,0.06);}
+
+/* Header */
 .header-row{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:12px}
 .brand{font-family:'Merriweather',serif;font-size:1.45rem;color:var(--accent);font-weight:700;}
 .meta{display:flex;gap:10px;align-items:center;color:var(--muted);font-size:0.95rem;}
 .meta input{border:none;border-bottom:1px dashed #e6eef8;background:transparent;padding:4px 6px;font-size:0.95rem}
 
+/* Questions */
 #questions{margin-top:8px}
 .q{border-radius:10px;background:#fbfeff;padding:12px;margin:12px 0;border:1px solid var(--border)}
 .q p{margin:0 0 8px;font-weight:700;color:#0f172a}
 .opts{display:flex;gap:12px;flex-wrap:wrap}
-.opt{flex:1 1 240px;padding:12px;border-radius:10px;border:1px solid rgba(15,23,42,0.08);cursor:pointer;background:transparent;display:flex;align-items:flex-start;gap:10px;transition:background .2s, border-color .2s}
+.opt{flex:1 1 240px;padding:12px;border-radius:10px;border:1px solid rgba(15,23,42,0.10);cursor:pointer;background:transparent;display:flex;align-items:flex-start;gap:10px;transition:background .2s, border-color .2s}
 .opt input{margin-top:4px}
 .opt.selected{background:#e8f5e8;border-color:var(--accent2);}
 
+/* Actions */
 .actions{display:flex;gap:10px;justify-content:center;margin-top:14px}
 .actions.stacked{flex-direction:column;align-items:stretch}
 button.btn{background:var(--accent);color:white;border:0;padding:12px 16px;border-radius:10px;font-weight:700;cursor:pointer}
-button.ghost{background:transparent;border:1px solid rgba(15,23,42,0.12);color:#0f172a}
+button.ghost{background:transparent;border:1px solid rgba(15,23,42,0.15);color:#0f172a}
 button.small{padding:10px 12px;font-size:.95rem}
 button.danger{border-color:#dc2626;color:#dc2626}
 
+/* Bottom progress (moved) */
+.progress-bottom{margin:8px 0 2px 0;text-align:center;color:var(--muted);font-weight:600}
+
+/* Results */
 #results{display:none;margin-top:18px}
-.report-header{display:flex;justify-content:center;align-items:center; flex-direction: column; text-align: center;}
-.type-box{border:2px solid var(--accent);border-radius:10px;padding:20px;background:#fff;margin-bottom:10px;width:100%;max-width:500px;box-shadow:0 4px 12px rgba(0,0,0,0.1)}
+.report-header{display:flex;justify-content:center;align-items:center;flex-direction:column;text-align:center;}
+.type-box{border:2px solid var(--accent);border-radius:10px;padding:20px;background:#fff;margin-bottom:10px;width:100%;max-width:520px;box-shadow:0 4px 12px rgba(0,0,0,0.1)}
 .type-box .type{font-family:'Merriweather',serif;font-size:2.5rem;font-weight:800;color:var(--accent);margin:0 0 10px;text-transform:uppercase;letter-spacing:2px}
-.type-box .title{font-family:'Merriweather',serif;font-size:1.8rem;color:#0b2540;margin:0;font-weight:600}
-.report-sub{color:var(--muted);margin:2px 0 0 0;font-size:1.1rem;}
+.type-box .title{font-family:'Merriweather',serif;font-size:1.6rem;color:#0b2540;margin:0;font-weight:600}
+.report-sub{color:var(--muted);margin:2px 0 0 0;font-size:1.05rem;}
 .report-block{padding:14px;border-radius:8px;background:#fbfdff;border:1px solid var(--border);margin-top:12px}
 .section-title{font-family:'Merriweather',serif;color:var(--accent);margin-bottom:8px;padding-bottom:6px;border-bottom:2px solid rgba(0,0,0,0.03)}
 #barChart{margin-top:10px}
 .trait-pair{display:flex;justify-content:space-between;align-items:center;gap:12px;margin:8px 0;}
 .trait-box{flex:1;padding:10px;border-radius:8px;border:1px solid var(--border);text-align:center;background:#fbfeff;transition:background .2s}
 .trait-box.selected{background:#e8f5e8;border-color:var(--accent2);font-weight:700}
-.trait-desc{font-size:.75rem;color:#6b7280;margin-top:4px;line-height:1.2}
+.trait-desc{font-size:.78rem;color:#6b7280;margin-top:4px;line-height:1.25}
 .careers-table{width:100%;border-collapse:collapse;margin-top:10px}
-.careers-table th,.careers-table td{border:1px solid var(--border);padding:8px;text-align:left}
+.careers-table th,.careers-table td{border:1px solid var(--border);padding:8px;text-align:left;vertical-align:top}
 .careers-table th{background:var(--accent);color:white;font-weight:bold}
 .careers-table tr:nth-child(even){background:#f8f9fa}
 .salary-note{color:var(--muted);font-size:0.85rem;margin-top:8px}
-.print-header{font-family:'Merriweather',serif;font-size:1.1rem;color:var(--accent);font-weight:600;margin-bottom:20px;display:flex;align-items:center;gap:20px;padding-top:5mm}
+.print-header{font-family:'Merriweather',serif;font-size:1.05rem;color:var(--accent);font-weight:600;margin-bottom:12px;display:flex;align-items:center;gap:20px;padding-top:5mm}
 .print-header span{display:inline-block}
 
-/* NEW: bottom progress placement */
-.progress-bottom{margin:8px 0 2px 0;text-align:center;color:var(--muted);font-weight:600}
-
-/* Print rules */
+/* Print */
 @media print{
   body,html{background:white;margin:0;padding:0;}
   .header-row,.meta input,#questions-section,.q,.opt,.opt.selected,#results,.report-block,.section-title,.report-title,.report-sub,.trait-pair,.trait-box,.print-header,.trait-desc,.careers-table{display:block !important;}
@@ -75,7 +80,7 @@ button.danger{border-color:#dc2626;color:#dc2626}
   .careers-table{width:100%}
 }
 
-/* Mobile-first refinements for iPhone widths */
+/* iPhone & small screens */
 @media (max-width:720px){
   .container{max-width:100%;padding:14px;margin:0 auto;}
   .header-row{flex-direction:column;align-items:flex-start;gap:8px}
@@ -106,9 +111,6 @@ button.danger{border-color:#dc2626;color:#dc2626}
       </div>
       <div class="meta">Student: <input id="studentName" placeholder="(Student name)" /> Date: <input id="reportDate" /></div>
     </div>
-
-    <!-- PROGRESS MOVED: now lives above the See Results button at bottom -->
-    <!-- <div id="progress">Question 1 of 40</div> -->
 
     <section id="questions-section">
       <form id="quizForm">
@@ -197,7 +199,7 @@ button.danger{border-color:#dc2626;color:#dc2626}
       </div>
 
       <div class="report-block">
-        <h3 class="section-title"> 20 Career Matches</h3>
+        <h3 class="section-title">20 Career Matches</h3>
         <table class="careers-table">
           <thead>
             <tr>
@@ -208,7 +210,7 @@ button.danger{border-color:#dc2626;color:#dc2626}
           </thead>
           <tbody id="careers-tbody"></tbody>
         </table>
-        <p class="salary-note">*Salary estimates based on 2025 U.S. Bureau of Labor Statistics and typical industry ranges. Local markets vary.</p>
+        <p class="salary-note">*Salary estimates are generic demo ranges; adjust for your region/market.</p>
       </div>
 
       <div class="report-block">
@@ -229,7 +231,7 @@ button.danger{border-color:#dc2626;color:#dc2626}
 
 <script>
 document.addEventListener('DOMContentLoaded', () => {
-  // 40 questions (10 per pair)
+  // --- Questions (40 total) ---
   const questions = [
     {q:"When faced with a group project, you prefer to…",a:[["work independently","I"],["brainstorm with others","E"]]},
     {q:"You make decisions based more on…",a:[["facts and logic","T"],["feelings and values","F"]]},
@@ -276,22 +278,23 @@ document.addEventListener('DOMContentLoaded', () => {
   const qContainer = document.getElementById('questions');
   document.getElementById('subtitleCount').textContent = questions.length.toString();
 
-  // Initialize bottom progress text
+  // Bottom progress text
   const progressEl = document.getElementById('progress');
   progressEl.textContent = `Question 1 of ${questions.length}`;
 
   // Render questions
-  let qHtml = "";
-  questions.forEach((obj, i) => {
-    qHtml += `<div class="q"><p>${i+1}. ${obj.q}</p><div class="opts">`;
-    obj.a.forEach((pair, ix) => {
+  qContainer.innerHTML = questions.map((obj, i) => {
+    const options = obj.a.map((pair, ix) => {
       const id = `q${i}_${ix}`;
-      qHtml += `<label class="opt" data-value="${pair[1]}"><input type="radio" name="q${i}" value="${pair[1]}" id="${id}"><span>${pair[0]}</span></label>`;
-    });
-    qHtml += "</div></div>";
-  });
-  qContainer.innerHTML = qHtml;
+      return `<label class="opt" data-value="${pair[1]}">
+                <input type="radio" name="q${i}" value="${pair[1]}" id="${id}">
+                <span>${pair[0]}</span>
+              </label>`;
+    }).join('');
+    return `<div class="q"><p>${i+1}. ${obj.q}</p><div class="opts">${options}</div></div>`;
+  }).join('');
 
+  // Selection + progress handling
   function refreshSelectionsAndProgress() {
     const done = document.querySelectorAll('input[type=radio]:checked').length;
     const total = questions.length;
@@ -303,10 +306,33 @@ document.addEventListener('DOMContentLoaded', () => {
       if (label) label.classList.add('selected');
     });
   }
-
   document.querySelectorAll("input[type=radio]").forEach(inp => {
     inp.addEventListener("change", refreshSelectionsAndProgress);
   });
+
+  // Save PDF (print)
+  document.getElementById('savePdf').addEventListener('click', () => {
+    window.print();
+  });
+
+  // Cache results DOM elements safely (no reliance on implicit globals)
+  const traitBoxE = document.getElementById('traitBoxE');
+  const traitBoxI = document.getElementById('traitBoxI');
+  const traitBoxS = document.getElementById('traitBoxS');
+  const traitBoxN = document.getElementById('traitBoxN');
+  const traitBoxT = document.getElementById('traitBoxT');
+  const traitBoxF = document.getElementById('traitBoxF');
+  const traitBoxJ = document.getElementById('traitBoxJ');
+  const traitBoxP = document.getElementById('traitBoxP');
+
+  const percentE = document.getElementById('percentE');
+  const percentI = document.getElementById('percentI');
+  const percentS = document.getElementById('percentS');
+  const percentN = document.getElementById('percentN');
+  const percentT = document.getElementById('percentT');
+  const percentF = document.getElementById('percentF');
+  const percentJ = document.getElementById('percentJ');
+  const percentP = document.getElementById('percentP');
 
   // See Results
   document.getElementById('seeResults').addEventListener('click', () => {
@@ -335,7 +361,7 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('questions-section').scrollIntoView({behavior:'smooth'});
   });
 
-  // END button: clear, reset, try to close
+  // END: clear, reset, try to close
   document.getElementById('endBtn').addEventListener('click', () => {
     const ok = confirm('End and clear all answers?');
     if (!ok) return;
@@ -369,25 +395,25 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('printDate').textContent = `Date: ${reportDate}`;
     const totalPerPair = totalQuestions / 4;
 
-    // Percentages
-    document.getElementById('percentE').textContent = Math.round((scores.E / totalPerPair) * 100);
-    document.getElementById('percentI').textContent = Math.round((scores.I / totalPerPair) * 100);
-    document.getElementById('percentS').textContent = Math.round((scores.S / totalPerPair) * 100);
-    document.getElementById('percentN').textContent = Math.round((scores.N / totalPerPair) * 100);
-    document.getElementById('percentT').textContent = Math.round((scores.T / totalPerPair) * 100);
-    document.getElementById('percentF').textContent = Math.round((scores.F / totalPerPair) * 100);
-    document.getElementById('percentJ').textContent = Math.round((scores.J / totalPerPair) * 100);
-    document.getElementById('percentP').textContent = Math.round((scores.P / totalPerPair) * 100);
+    // Percentages (rounded)
+    percentE.textContent = Math.round((scores.E / totalPerPair) * 100);
+    percentI.textContent = Math.round((scores.I / totalPerPair) * 100);
+    percentS.textContent = Math.round((scores.S / totalPerPair) * 100);
+    percentN.textContent = Math.round((scores.N / totalPerPair) * 100);
+    percentT.textContent = Math.round((scores.T / totalPerPair) * 100);
+    percentF.textContent = Math.round((scores.F / totalPerPair) * 100);
+    percentJ.textContent = Math.round((scores.J / totalPerPair) * 100);
+    percentP.textContent = Math.round((scores.P / totalPerPair) * 100);
 
-    // Highlight winners
-    document.querySelectorAll('.trait-box').forEach(box => box.classList.remove('selected'));
+    // Highlight winners (first clear)
+    [traitBoxE,traitBoxI,traitBoxS,traitBoxN,traitBoxT,traitBoxF,traitBoxJ,traitBoxP].forEach(b => b.classList.remove('selected'));
     (type.includes('E') ? traitBoxE : traitBoxI).classList.add('selected');
     (type.includes('S') ? traitBoxS : traitBoxN).classList.add('selected');
     (type.includes('T') ? traitBoxT : traitBoxF).classList.add('selected');
     (type.includes('J') ? traitBoxJ : traitBoxP).classList.add('selected');
 
-    // Fill report from typeData
-    const tData = typeData[type];
+    // Fill report from generated data
+    const tData = getTypeData(type);
     document.getElementById('reportType').textContent = type;
     document.getElementById('reportTitle').textContent = tData.title;
     document.getElementById('reportSub').textContent = tData.subtitle;
@@ -416,11 +442,84 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('postActions').style.display = 'flex';
     document.getElementById('results').scrollIntoView({behavior:'smooth'});
   }
-});
 
-// --- BEGIN: your unchanged typeData block ---
-// Paste your existing full `const typeData = { ... }` here exactly as-is.
-// --- END: your unchanged typeData block ---
+  // ---------- Lightweight generated content so this file works standalone ----------
+  function getTypeNickname(type){
+    const names = {
+      ISTJ:"The Organizer", ISFJ:"The Nurturer", INFJ:"The Visionary", INTJ:"The Strategist",
+      ISTP:"The Tinkerer", ISFP:"The Creator", INFP:"The Idealist", INTP:"The Analyst",
+      ESTP:"The Dynamo", ESFP:"The Entertainer", ENFP:"The Inspirer", ENTP:"The Inventor",
+      ESTJ:"The Director", ESFJ:"The Supporter", ENFJ:"The Mentor", ENTJ:"The Commander"
+    };
+    return names[type] || "Personality Match";
+  }
+
+  function synthesizeCareers(type){
+    const base = [
+      ["Software Developer","Problem-solving and building systems fit your thinking style.","$75k–$140k"],
+      ["Data Analyst","Structured analysis and patterns match your strengths.","$60k–$115k"],
+      ["Mechanical Technician","Hands-on troubleshooting and precision work.","$45k–$85k"],
+      ["Project Coordinator","Planning, communication, and follow-through.","$50k–$95k"],
+      ["Graphic Designer","Creativity + translating ideas visually.","$50k–$100k"],
+      ["Marketing Associate","Ideas, messaging, and audience awareness.","$48k–$95k"],
+      ["Teacher","Explaining concepts and guiding growth.","$45k–$90k"],
+      ["Nurse","Care, attention to detail, steady under pressure.","$65k–$120k"],
+      ["Electrician","Applied problem-solving and safety focus.","$50k–$100k"],
+      ["Business Analyst","Requirements, systems, and outcomes.","$65k–$120k"],
+      ["Entrepreneur","Initiative, resilience, and adaptability.","Varies widely"],
+      ["UX Designer","Empathy + logic to improve experiences.","$70k–$135k"],
+      ["Civil Engineer","Designing practical solutions for society.","$70k–$130k"],
+      ["Accountant","Accuracy, structure, and reliability.","$55k–$105k"],
+      ["Sales Consultant","Influence, relationships, and goals.","$50k–$130k+"],
+      ["Content Producer","Storytelling and creativity with deadlines.","$45k–$95k"],
+      ["Web Developer","Making ideas work on the web.","$60k–$125k"],
+      ["Lab Researcher","Methodical testing and discovery.","$55k–$110k"],
+      ["Operations Manager","Coordinating people, tools, and timelines.","$70k–$140k"],
+      ["Cybersecurity Analyst","Systems thinking + vigilance.","$75k–$150k"]
+    ];
+    return base.map(([title,why,salary]) => ({title,why:`(${type}) ${why}`,salary}));
+  }
+
+  function synthesizeCompatibles(type){
+    const all = ["ISTJ","ISFJ","INFJ","INTJ","ISTP","ISFP","INFP","INTP","ESTP","ESFP","ENFP","ENTP","ESTJ","ESFJ","ENFJ","ENTJ"];
+    const others = all.filter(t => t !== type);
+    const shuffled = others.sort(() => Math.random()-0.5);
+    const comp = shuffled.slice(0,3).map(t => ({type:t, desc:"Naturally complementary strengths and communication style."}));
+    const incomp = shuffled.slice(3,6).map(t => ({type:t, desc:"Different priorities that require extra communication effort."}));
+    return {comp, incomp};
+  }
+
+  function getTypeData(type){
+    const nickname = getTypeNickname(type);
+    const lens = {
+      E:"outgoing, quick to engage", I:"reflective, thoughtful",
+      S:"practical, detail-focused", N:"imaginative, big-picture",
+      T:"logical, objective", F:"empathetic, values-driven",
+      J:"organized, structured", P:"flexible, adaptable"
+    };
+    const blurb =
+      `${type[0]==='E'?lens.E:lens.I}; ${type[1]==='S'?lens.S:lens.N}; ` +
+      `${type[2]==='T'?lens.T:lens.F}; and ${type[3]==='J'?lens.J:lens.P}.`;
+
+    const {comp, incomp} = synthesizeCompatibles(type);
+
+    return {
+      title: nickname,
+      subtitle: "Your four-letter pattern suggests how you take in information and make decisions.",
+      summary: `You show a ${type} pattern—${blurb} You likely prefer tasks and study habits that play to these tendencies.`,
+      likes: "Work that matches your pace, clear expectations, and chances to grow real strengths.",
+      strengths: "Self-awareness, commitment to improvement, and ability to learn from feedback.",
+      growth: "Balance your defaults by practicing the opposite side in low-stakes settings.",
+      compatible: comp,
+      incompatible: incomp,
+      famous: ["(Demo) Person A","(Demo) Person B","(Demo) Person C"],
+      prep: "Choose classes and clubs that stretch your weaker letters while doubling down on natural strengths.",
+      careers: synthesizeCareers(type)
+    };
+  }
+  // ---------- End generated content ----------
+});
 </script>
 </body>
 </html>
+
