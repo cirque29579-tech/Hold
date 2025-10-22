@@ -116,7 +116,6 @@ button.danger{border-color:#dc2626;color:#dc2626}
       <form id="quizForm">
         <div id="questions"></div>
 
-        <!-- Bottom progress + actions (stack on iPhone) -->
         <div class="actions stacked">
           <div id="progress-bottom" class="progress-bottom">
             <span id="progress">Question 1 of 40</span>
@@ -193,7 +192,7 @@ button.danger{border-color:#dc2626;color:#dc2626}
         <div id="incompatible"></div>
       </div>
 
-      <div class="report-block">
+      <div class="report-block" id="famousBlock" style="display:none;">
         <h3 class="section-title">Famous <span id="famousType"></span>s</h3>
         <ul id="famous"></ul>
       </div>
@@ -210,7 +209,7 @@ button.danger{border-color:#dc2626;color:#dc2626}
           </thead>
           <tbody id="careers-tbody"></tbody>
         </table>
-        <p class="salary-note">*Salary estimates are generic demo ranges; adjust for your region/market.</p>
+        <p class="salary-note">*Salary ranges are generic demo values—tune for your region/market.</p>
       </div>
 
       <div class="report-block">
@@ -278,7 +277,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const qContainer = document.getElementById('questions');
   document.getElementById('subtitleCount').textContent = questions.length.toString();
 
-  // Bottom progress text
   const progressEl = document.getElementById('progress');
   progressEl.textContent = `Question 1 of ${questions.length}`;
 
@@ -315,7 +313,7 @@ document.addEventListener('DOMContentLoaded', () => {
     window.print();
   });
 
-  // Cache results DOM elements safely (no reliance on implicit globals)
+  // Cache results DOM elements
   const traitBoxE = document.getElementById('traitBoxE');
   const traitBoxI = document.getElementById('traitBoxI');
   const traitBoxS = document.getElementById('traitBoxS');
@@ -333,6 +331,10 @@ document.addEventListener('DOMContentLoaded', () => {
   const percentF = document.getElementById('percentF');
   const percentJ = document.getElementById('percentJ');
   const percentP = document.getElementById('percentP');
+
+  const famousBlock = document.getElementById('famousBlock');
+  const famousTypeEl = document.getElementById('famousType');
+  const famousListEl = document.getElementById('famous');
 
   // See Results
   document.getElementById('seeResults').addEventListener('click', () => {
@@ -352,8 +354,7 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   // Review Questions
-  const reviewBtn = document.getElementById('reviewQuestions');
-  reviewBtn.addEventListener('click', () => {
+  document.getElementById('reviewQuestions').addEventListener('click', () => {
     document.getElementById('results').style.display = 'none';
     document.getElementById('questions-section').style.display = 'block';
     document.getElementById('postActions').style.display = 'flex';
@@ -366,18 +367,14 @@ document.addEventListener('DOMContentLoaded', () => {
     const ok = confirm('End and clear all answers?');
     if (!ok) return;
 
-    // Clear form selections
     document.getElementById('quizForm').reset();
     document.querySelectorAll('.opt').forEach(o => o.classList.remove('selected'));
     progressEl.textContent = `Question 1 of ${questions.length}`;
-
-    // Hide results, show questions
     document.getElementById('results').style.display = 'none';
     document.getElementById('questions-section').style.display = 'block';
     document.getElementById('postActions').style.display = 'none';
     window.scrollTo({top:0,behavior:'smooth'});
 
-    // Try to close the tab/window; if blocked, navigate away
     try {
       window.close();
       setTimeout(() => {
@@ -405,14 +402,14 @@ document.addEventListener('DOMContentLoaded', () => {
     percentJ.textContent = Math.round((scores.J / totalPerPair) * 100);
     percentP.textContent = Math.round((scores.P / totalPerPair) * 100);
 
-    // Highlight winners (first clear)
+    // Highlight winners
     [traitBoxE,traitBoxI,traitBoxS,traitBoxN,traitBoxT,traitBoxF,traitBoxJ,traitBoxP].forEach(b => b.classList.remove('selected'));
     (type.includes('E') ? traitBoxE : traitBoxI).classList.add('selected');
     (type.includes('S') ? traitBoxS : traitBoxN).classList.add('selected');
     (type.includes('T') ? traitBoxT : traitBoxF).classList.add('selected');
     (type.includes('J') ? traitBoxJ : traitBoxP).classList.add('selected');
 
-    // Fill report from generated data
+    // Pull content
     const tData = getTypeData(type);
     document.getElementById('reportType').textContent = type;
     document.getElementById('reportTitle').textContent = tData.title;
@@ -423,9 +420,16 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('growth').textContent = tData.growth;
     document.getElementById('compatible').innerHTML = tData.compatible.map(t => `<p><strong>${t.type}</strong> — ${t.desc}</p>`).join('');
     document.getElementById('incompatible').innerHTML = tData.incompatible.map(t => `<p><strong>${t.type}</strong> — ${t.desc}</p>`).join('');
-    document.getElementById('famousType').textContent = type;
-    document.getElementById('famous').innerHTML = tData.famous.map(name => `<li>${name}</li>`).join('');
-    document.getElementById('prep').textContent = tData.prep;
+
+    // Famous (hide block if none)
+    if (tData.famous && tData.famous.length) {
+      famousTypeEl.textContent = type;
+      famousListEl.innerHTML = tData.famous.map(name => `<li>${name}</li>`).join('');
+      famousBlock.style.display = 'block';
+    } else {
+      famousBlock.style.display = 'none';
+      famousListEl.innerHTML = '';
+    }
 
     // Careers table
     const careersTbody = document.getElementById('careers-tbody');
@@ -436,14 +440,37 @@ document.addEventListener('DOMContentLoaded', () => {
         <td>${c.salary}</td>
       </tr>`).join('');
 
-    // Show results + post-actions
     document.getElementById('questions-section').style.display = 'none';
     document.getElementById('results').style.display = 'block';
     document.getElementById('postActions').style.display = 'flex';
     document.getElementById('results').scrollIntoView({behavior:'smooth'});
   }
 
-  // ---------- Lightweight generated content so this file works standalone ----------
+  // --------- CONFIG: (Optional) Add famous names per type here ----------
+  // These are intentionally blank to avoid placeholder "(Demo)" entries.
+  // If you want names to appear, just add arrays of strings. Example:
+  // famousByType.INTJ = ["Isaac Newton*","Elon Musk*","Angela Merkel*"];
+  // (*Fan-typed; public lists often disagree.)
+  const famousByType = {
+    ISTJ: [],
+    ISFJ: [],
+    INFJ: [],
+    INTJ: [],
+    ISTP: [],
+    ISFP: [],
+    INFP: [],
+    INTP: [],
+    ESTP: [],
+    ESFP: [],
+    ENFP: [],
+    ENTP: [],
+    ESTJ: [],
+    ESFJ: [],
+    ENFJ: [],
+    ENTJ: []
+  };
+  // ---------------------------------------------------------------------
+
   function getTypeNickname(type){
     const names = {
       ISTJ:"The Organizer", ISFJ:"The Nurturer", INFJ:"The Visionary", INTJ:"The Strategist",
@@ -484,8 +511,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const all = ["ISTJ","ISFJ","INFJ","INTJ","ISTP","ISFP","INFP","INTP","ESTP","ESFP","ENFP","ENTP","ESTJ","ESFJ","ENFJ","ENTJ"];
     const others = all.filter(t => t !== type);
     const shuffled = others.sort(() => Math.random()-0.5);
-    const comp = shuffled.slice(0,3).map(t => ({type:t, desc:"Naturally complementary strengths and communication style."}));
-    const incomp = shuffled.slice(3,6).map(t => ({type:t, desc:"Different priorities that require extra communication effort."}));
+    const comp = shuffled.slice(0,3).map(t => ({type:t, desc:"Complementary strengths and communication style."}));
+    const incomp = shuffled.slice(3,6).map(t => ({type:t, desc:"Different priorities that need extra communication."}));
     return {comp, incomp};
   }
 
@@ -512,14 +539,13 @@ document.addEventListener('DOMContentLoaded', () => {
       growth: "Balance your defaults by practicing the opposite side in low-stakes settings.",
       compatible: comp,
       incompatible: incomp,
-      famous: ["(Demo) Person A","(Demo) Person B","(Demo) Person C"],
+      famous: famousByType[type] || [],
       prep: "Choose classes and clubs that stretch your weaker letters while doubling down on natural strengths.",
       careers: synthesizeCareers(type)
     };
   }
-  // ---------- End generated content ----------
+  // ---------- End ----------
 });
 </script>
 </body>
 </html>
-
